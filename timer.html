@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stopwatch</title>
+</head>
+<body>
+    <button onclick="stopwatch.start()">Start</button>
+    <button onclick="stopwatch.stop()">Stop</button>
+    <button onclick="stopwatch.reset()">Reset</button>
+    <div id="display">0:0:0</div>
+    
+    <script>
+        class Stopwatch {
+            constructor() {
+                this.startTime = 0;
+                this.elapsedTime = 0;
+                this.timerInterval = null;
+            }
+
+            start() {
+                if (this.timerInterval) return; // Prevent multiple intervals
+                this.startTime = Date.now() - this.elapsedTime;
+                this.timerInterval = setInterval(() => {
+                    this.elapsedTime = Date.now() - this.startTime;
+                    this.printTime();
+                }, 1000); // Update every second
+            }
+
+            stop() {
+                clearInterval(this.timerInterval);
+                this.timerInterval = null;
+            }
+
+            reset() {
+                this.stop();
+                this.elapsedTime = 0;
+                this.printTime();
+            }
+
+            printTime() {
+                const totalSeconds = Math.floor(this.elapsedTime / 1000);
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                document.getElementById('display').innerText = `${hours}:${minutes}:${seconds}`;
+            }
+        }
+
+        const stopwatch = new Stopwatch();
+    </script>
+</body>
+</html>
